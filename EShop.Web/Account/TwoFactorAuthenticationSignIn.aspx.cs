@@ -7,7 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using EShop.Web.Models;
+using EShop.CORE;
 
 namespace EShop.Web.Account
 {

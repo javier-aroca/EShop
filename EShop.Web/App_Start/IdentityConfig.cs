@@ -6,7 +6,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using EShop.Web.Models;
+using EShop.CORE;
+using EShop.DAL;
 
 namespace EShop.Web
 {
