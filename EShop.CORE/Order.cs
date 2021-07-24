@@ -20,7 +20,7 @@ namespace EShop.CORE
         public ApplicationUser User { get; set; }
 
         /// <summary>
-        /// identificador del usuario que realiza el pedido
+        /// identificador del usuario que realiza el pedido; tiene que existir como usuario
         /// </summary>
         [ForeignKey("User")]
         public string UserId { get; set; }

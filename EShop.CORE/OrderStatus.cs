@@ -8,7 +8,7 @@
         /// <summary>
         /// pedido pendiente no pagado
         /// </summary>
-        Pendiente= 0,
+        Pendiente = 0,
         /// <summary>
         /// pedido pagado pero no enviado
         /// </summary>
@@ -16,6 +16,6 @@
         /// <summary>
         /// pedido pagado y enviado
         /// </summary>
-        Enviado=2
+        Enviado = 2
     }
 }

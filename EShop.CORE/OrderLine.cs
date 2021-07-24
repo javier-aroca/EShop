@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EShop.CORE
+﻿namespace EShop.CORE
 {
     /// <summary>
     /// entidad de dominio de lineas de pedido 
@@ -15,17 +9,17 @@ namespace EShop.CORE
         /// id de la linea de pedido
         /// </summary>
         public int Id { get; set; }
-        
+
         /// <summary>
         /// nombre del producto
         /// </summary>
         public string ProductName { get; set; }
-        
+
         /// <summary>
         /// precio del producto para ese pedido
         /// </summary>
         public float Price { get; set; }
-        
+
         /// <summary>
         /// cantidad de producto
         /// </summary>
