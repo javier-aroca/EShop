@@ -1,10 +1,9 @@
-﻿using System;
-using System.Web;
+﻿using EShop.CORE;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Owin;
-using EShop.CORE;
+using System;
+using System.Web;
 
 namespace EShop.Web.Account
 {
@@ -78,8 +77,8 @@ namespace EShop.Web.Account
                     email.Text = loginInfo.Email;
                 }
             }
-        }        
-        
+        }
+
         protected void LogIn_Click(object sender, EventArgs e)
         {
             CreateAndLoginUser();
@@ -119,9 +118,9 @@ namespace EShop.Web.Account
             AddErrors(result);
         }
 
-        private void AddErrors(IdentityResult result) 
+        private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors) 
+            foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
             }

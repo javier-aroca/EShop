@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EShop.CORE
@@ -23,5 +20,15 @@ namespace EShop.CORE
         {
             return Task.FromResult(GenerateUserIdentity(manager));
         }
+    
+    /// <summary>
+    /// colleción de pedidos de un cliente
+    /// </summary>
+    public virtual List<Order> Orders { get; set; }
+
+        /// <summary>
+        /// colleccion de productos en el carrito del cliente
+        /// </summary>
+        public virtual List<ShoppingCartLine> ShoppingCartLines { get; set; }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Web;
-using System.Web.UI;
+﻿using EShop.CORE;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Owin;
-using EShop.CORE;
+using System;
+using System.Web;
+using System.Web.UI;
 
 namespace EShop.Web.Account
 {
