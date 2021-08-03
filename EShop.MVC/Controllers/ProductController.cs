@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using EShop.CORE.Contracts;
 using Microsoft.AspNet.Identity;
+using EShop.Application;
 
 namespace EShop.MVC.Controllers
 {
@@ -17,29 +18,39 @@ namespace EShop.MVC.Controllers
         IProductManager productManager = null;
         /*ILogEvent _log = null;*/
 
-        /// <summary>
+/*        /// <summary>
         /// constructor del controlador de la vista de listado de productos
         /// </summary>
         /// <param name="productManager"></param>
-        public ProductController(IProductManager productManager)
+       public ProductController(IProductManager productManager)
         {
             this.productManager = productManager;
-        }
+        }*/
 
         public ProductController()
         {
+            IApplicationDbContext context = new ApplicationDbContext();
+            this.productManager = new ProductManager(context);
         }
 
         
         // GET: Product
         public ActionResult Index()
         {
-            var model = new List<ProductList>();
+            var model = productManager.GetAll()
+                .Select(e => new ProductList
+                {
+                    Name = e.Name,
+                    Price = e.Price,
+                    Stock = e.Stock
+                });
 
-            model.Add(new ProductList{ Id=1,Name="Producto 1", Price=10, Stock=3});
-            model.Add(new ProductList { Id = 2, Name = "Producto 2", Price = 15, Stock = 4 });
-
+             
             return View(model);
+
+
+
+
         }
 
         // GET: Product/Details/5
