@@ -1,15 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using EShop.CORE;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
 
-namespace EShop.CORE
+namespace EShop.MVC.Models
 {
-    public class ShoppingCartLine
+    /// <summary>
+    /// Clase para listar los productos del carrito del cliente
+    /// </summary>
+    public class ShoppingCartList
     {
         /// <summary>
         /// id de la linea del carrito
         /// </summary>
         public int Id { get; set; }
 
-        /// <summary>
+/*        /// <summary>
         /// Usuario que ha creado la incidencia
         /// </summary>
         public ApplicationUser User { get; set; }
@@ -18,18 +26,18 @@ namespace EShop.CORE
         /// Identificador del usuario que ha creado la incidencia
         /// </summary>
         [ForeignKey("User")]
-        public string UserId { get; set; }
+        public string UserId { get; set; }*/
 
         /// <summary>
         /// producto que incluye en el carrito
         /// </summary>
         public Product Product { get; set; }
 
-        /// <summary>
+/*        /// <summary>
         /// identificador del producto que se incluye en el carrito
         /// </summary>
         [ForeignKey("Product")]
-        public int ProductId { get; set; }
+        public int ProductId { get; set; }*/
 
         /// <summary>
         /// cantidad de producto

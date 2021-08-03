@@ -1,10 +1,11 @@
 ﻿using EShop.CORE;
+using EShop.CORE.Contracts;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 
 namespace EShop.DAL
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -22,7 +23,7 @@ namespace EShop.DAL
         /// <summary>
         /// coleccion persistible de imagenes
         /// </summary>
-        public DbSet<Image>Images { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         /// <summary>
         /// coleccion persistible de pedidos 

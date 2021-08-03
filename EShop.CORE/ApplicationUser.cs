@@ -20,11 +20,11 @@ namespace EShop.CORE
         {
             return Task.FromResult(GenerateUserIdentity(manager));
         }
-    
-    /// <summary>
-    /// colleción de pedidos de un cliente
-    /// </summary>
-    public virtual List<Order> Orders { get; set; }
+
+        /// <summary>
+        /// colleción de pedidos de un cliente
+        /// </summary>
+        public virtual List<Order> Orders { get; set; }
 
         /// <summary>
         /// colleccion de productos en el carrito del cliente
