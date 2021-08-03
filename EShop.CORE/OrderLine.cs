@@ -18,7 +18,7 @@
         /// <summary>
         /// precio del producto para ese pedido
         /// </summary>
-        public float Price { get; set; }
+        public decimal Price { get; set; }
 
         /// <summary>
         /// cantidad de producto
