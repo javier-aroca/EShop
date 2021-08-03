@@ -1,5 +1,7 @@
 ﻿
 
+using System.Linq;
+
 namespace EShop.CORE.Contracts
 {
     public interface IGenericManager<T> where T : class
@@ -10,5 +12,7 @@ namespace EShop.CORE.Contracts
         T GetById(int id);
         T GetById(object[] key);
         T Remove(T entity);
+
+        IQueryable<T> GetAll();
     }
 }

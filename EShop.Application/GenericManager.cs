@@ -1,6 +1,6 @@
 ﻿using EShop.CORE.Contracts;
 using EShop.DAL;
-
+using System.Linq;
 
 namespace EShop.Application
 {
@@ -62,6 +62,15 @@ namespace EShop.Application
         public T GetById(int id)
         {
             return GetById(new object[] { id });
+        }
+
+        /// <summary>
+        /// Obtiene todas las entidades de un tipo específico
+        /// </summary>
+        /// <returns>Lista todas las incidencias</returns>
+        public IQueryable<T> GetAll()
+        {
+            return Context.Set<T>();
         }
 
 
