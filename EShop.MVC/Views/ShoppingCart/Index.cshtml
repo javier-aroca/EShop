@@ -7,11 +7,15 @@
 
 <h2>Listado de productos en el carrito</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
 <table class="table">
     <tr>
+        <th>
+            <p>Borrar Producto</p>
+
+        </th>
         <th>
             @Html.DisplayNameFor(model => model.Id)
         </th>
@@ -27,6 +31,10 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td>
+                <input type="submit" value="Eliminar producto" />
+            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
@@ -45,3 +53,9 @@
     }
 
 </table>
+
+<p>
+    @*@Html.ActionLink("Comprar", "Create")*@
+    <input type="submit" value="Confirmar compra" />
+
+</p>

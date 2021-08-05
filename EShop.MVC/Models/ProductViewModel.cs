@@ -1,16 +1,15 @@
-﻿using System;
+﻿using EShop.CORE;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
 namespace EShop.MVC.Models
 {
-    /// <summary>
-    /// clase para listar productos
-    /// </summary>
-    public class ProductList
+    public class ProductViewModel
     {
+
+    
         /// <summary>
         /// id del producto
         /// </summary>
@@ -19,13 +18,11 @@ namespace EShop.MVC.Models
         /// <summary>
         /// texto del producto
         /// </summary>
-        [Display(Name = "Nombre")]
         public string Name { get; set; }
 
         /// <summary>
         /// precio del producto
         /// </summary>
-        [Display(Name = "Precio")]
         public decimal Price { get; set; }
 
         /// <summary>
@@ -33,11 +30,10 @@ namespace EShop.MVC.Models
         /// </summary>
         public int Stock { get; set; }
 
-
         /// <summary>
-        /// imagen del producto
+        /// Lista de imagenes del producto
         /// </summary>
-        public string Image { get; set; }
-
-    }
+        public Image Image { get; set; }
+    
 }
+    }
