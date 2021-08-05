@@ -1,4 +1,5 @@
 ﻿using EShop.Application;
+using EShop.CORE;
 using EShop.CORE.Contracts;
 using EShop.DAL;
 using EShop.MVC.Models;
@@ -59,7 +60,32 @@ namespace EShop.MVC.Controllers
 
         // POST: ShoppingCart/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+
+        public ActionResult Create(Models.ShoppingCartList model)
+        {
+            try
+            {
+                CORE.ShoppingCartLine shoppingCartLine = new CORE.ShoppingCartLine
+                {
+                    Product = model.Product,
+                    Quantity = model.Quantity,
+                    UserId = User.Identity.GetUserId()
+                };
+                shoppingCartManager.Add(shoppingCartLine);
+                shoppingCartManager.Context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+
+
+/*        public ActionResult Create(FormCollection collection)
         {
             try
             {
@@ -71,7 +97,7 @@ namespace EShop.MVC.Controllers
             {
                 return View();
             }
-        }
+        }*/
 
         // GET: ShoppingCart/Edit/5
         public ActionResult Edit(int id)

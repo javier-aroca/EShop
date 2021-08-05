@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using EShop.CORE.Contracts;
 using Microsoft.AspNet.Identity;
 using EShop.Application;
+using System.Data.Entity;
 
 namespace EShop.MVC.Controllers
 {
@@ -38,8 +39,10 @@ namespace EShop.MVC.Controllers
         public ActionResult Index()
         {
             var model = productManager.GetAll()
+                .Include(e => e.Images)
                 .Select(e => new ProductList
                 {
+                    Id = e.Id,
                     Name = e.Name,
                     Price = e.Price,
                     Stock = e.Stock
@@ -56,7 +59,21 @@ namespace EShop.MVC.Controllers
         // GET: Product/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var product = productManager.GetById(id);
+
+            if (product!=null)
+            {
+                Models.ProductViewModel model = new Models.ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Stock = product.Stock
+                };
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Product/Create
@@ -67,11 +84,20 @@ namespace EShop.MVC.Controllers
 
         // POST: Product/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Models.ProductViewModel model)
         {
             try
             {
-                // TODO: Add insert logic here
+                CORE.Product product = new CORE.Product
+                {
+                    
+                    Name = model.Name,
+                    Price = model.Price,
+                    Stock = model.Stock
+                };
+
+                productManager.Add(product);
+                productManager.Context.SaveChanges();
 
                 return RedirectToAction("Index");
             }
@@ -84,21 +110,47 @@ namespace EShop.MVC.Controllers
         // GET: Product/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var product = productManager.GetById(id);
+            if (product != null)
+            {
+                Models.ProductViewModel model = new Models.ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Stock = product.Stock
+                };
+                return View(model);
+            }
+            return RedirectToAction("Index");
+
+
         }
 
         // POST: Product/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Models.ProductViewModel model)
         {
             try
             {
-                // TODO: Add update logic here
+                var product = productManager.GetById(id);
+
+                if (id != null)
+                {
+                    product.Id = model.Id;
+                    product.Name = model.Name;
+                    product.Price = model.Price;
+                    product.Stock = model.Stock;
+
+                    productManager.Context.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }
             catch
             {
+                //TODO: Registar el error a traves de IFR
+                ModelState.AddModelError("", "Se ha producido un error contacte con el administrador.");
                 return View();
             }
         }
@@ -106,16 +158,38 @@ namespace EShop.MVC.Controllers
         // GET: Product/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var product = productManager.GetById(id);
+            {
+                if (product != null)
+                {
+                    Models.ProductViewModel model = new Models.ProductViewModel
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        Price = product.Price,
+                        Stock = product.Stock
+                    };
+                    return View(model);
+                }
+                return RedirectToAction("Index");
+            }
+
+            
         }
 
         // POST: Product/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Models.ProductViewModel model)
         {
             try
             {
-                // TODO: Add delete logic here
+                var product = productManager.GetById(id);
+
+                if (product != null)
+                {
+                    productManager.Remove(product);
+                    productManager.Context.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }

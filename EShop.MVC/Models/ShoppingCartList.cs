@@ -1,6 +1,7 @@
 ﻿using EShop.CORE;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -31,6 +32,7 @@ namespace EShop.MVC.Models
         /// <summary>
         /// producto que incluye en el carrito
         /// </summary>
+        [Display(Name = "Producto")] 
         public Product Product { get; set; }
 
 /*        /// <summary>
@@ -42,6 +44,7 @@ namespace EShop.MVC.Models
         /// <summary>
         /// cantidad de producto
         /// </summary>
+        [Display(Name = "Cantidad")] 
         public int Quantity { get; set; }
     }
 }
