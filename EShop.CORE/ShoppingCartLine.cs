@@ -10,12 +10,12 @@ namespace EShop.CORE
         public int Id { get; set; }
 
         /// <summary>
-        /// Usuario que ha creado la incidencia
+        /// Usuario que ha creado la reserva del producto
         /// </summary>
         public ApplicationUser User { get; set; }
 
         /// <summary>
-        /// Identificador del usuario que ha creado la incidencia
+        /// Identificador del usuario que ha creado la reserva del producto
         /// </summary>
         [ForeignKey("User")]
         public string UserId { get; set; }

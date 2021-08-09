@@ -18,6 +18,7 @@ namespace EShop.MVC.Controllers
         /*IApplicationDbContext context = null;*/
         IProductManager productManager = null;
         /*ILogEvent _log = null;*/
+        IApplicationDbContext context;
 
 /*        /// <summary>
         /// constructor del controlador de la vista de listado de productos
@@ -30,7 +31,7 @@ namespace EShop.MVC.Controllers
 
         public ProductController()
         {
-            IApplicationDbContext context = new ApplicationDbContext();
+            context = new ApplicationDbContext();
             this.productManager = new ProductManager(context);
         }
 
@@ -135,7 +136,7 @@ namespace EShop.MVC.Controllers
             {
                 var product = productManager.GetById(id);
 
-                if (id != null)
+                if (product != null)
                 {
                     product.Id = model.Id;
                     product.Name = model.Name;
@@ -197,6 +198,39 @@ namespace EShop.MVC.Controllers
             {
                 return View();
             }
+        }
+
+
+        public ActionResult AddToCartView(int idProduct)
+        {
+            var product = productManager.GetById(idProduct);
+
+            if (product != null)
+            {
+                var shoppingCartLineManager = new Application.IShoppingCartLineManager(context);
+                var line = shoppingCartLineManager.GetByUserId(User.Identity.GetUserId()).FirstOrDefault(x => x.ProductId == idProduct);
+                if (line == null)
+                {
+                    CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+                    {
+                        UserId = User.Identity.GetUserId(),
+                        ProductId = idProduct,
+                        Quantity = 1,
+
+                    };
+                    shoppingCartLineManager.Add(newLine);
+                }
+                else
+                {
+
+                    line.Quantity++;
+                }
+                shoppingCartLineManager.Context.SaveChanges();
+            }
+
+
+            return RedirectToAction("Index");
+
         }
     }
 }
