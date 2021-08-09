@@ -19,6 +19,7 @@ namespace EShop.MVC.Controllers
         IProductManager productManager = null;
         /*ILogEvent _log = null;*/
         IApplicationDbContext context;
+        IShoppingCartLineManager shoppingCartLineManager;
 
 /*        /// <summary>
         /// constructor del controlador de la vista de listado de productos
@@ -33,6 +34,7 @@ namespace EShop.MVC.Controllers
         {
             context = new ApplicationDbContext();
             this.productManager = new ProductManager(context);
+            this.shoppingCartLineManager = new ShoppingCartLineManager(context);
         }
 
         
@@ -203,30 +205,31 @@ namespace EShop.MVC.Controllers
 
         public ActionResult AddToCartView(int idProduct)
         {
-            var product = productManager.GetById(idProduct);
+            shoppingCartLineManager.AddToCart(idProduct, User.Identity.GetUserId());
+            //var product = productManager.GetById(idProduct);
 
-            if (product != null)
-            {
-                var shoppingCartLineManager = new Application.IShoppingCartLineManager(context);
-                var line = shoppingCartLineManager.GetByUserId(User.Identity.GetUserId()).FirstOrDefault(x => x.ProductId == idProduct);
-                if (line == null)
-                {
-                    CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
-                    {
-                        UserId = User.Identity.GetUserId(),
-                        ProductId = idProduct,
-                        Quantity = 1,
+            //if (product != null)
+            //{
+            //    var shoppingCartLineManager = new Application.IShoppingCartLineManager(context);
+            //    var line = shoppingCartLineManager.GetByUserId(User.Identity.GetUserId()).FirstOrDefault(x => x.ProductId == idProduct);
+            //    if (line == null)
+            //    {
+            //        CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+            //        {
+            //            UserId = User.Identity.GetUserId(),
+            //            ProductId = idProduct,
+            //            Quantity = 1,
 
-                    };
-                    shoppingCartLineManager.Add(newLine);
-                }
-                else
-                {
+            //        };
+            //        shoppingCartLineManager.Add(newLine);
+            //    }
+            //    else
+            //    {
 
-                    line.Quantity++;
-                }
-                shoppingCartLineManager.Context.SaveChanges();
-            }
+            //        line.Quantity++;
+            //    }
+            //    shoppingCartLineManager.Context.SaveChanges();
+            //}
 
 
             return RedirectToAction("Index");

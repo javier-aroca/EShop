@@ -6,5 +6,6 @@ namespace EShop.CORE.Contracts
     public interface IShoppingCartLineManager : IGenericManager<ShoppingCartLine>
     {
         IQueryable<ShoppingCartLine> GetByUserId(string userId);
+        void AddToCart(int productId, string userId);
     }
 }

@@ -14,14 +14,14 @@ namespace EShop.Application
     /// <summary>
     /// manager de carrito de compra
     /// </summary>
-    public class IShoppingCartLineManager : GenericManager<ShoppingCartLine>, CORE.Contracts.IShoppingCartLineManager
+    public class ShoppingCartLineManager : GenericManager<ShoppingCartLine>, CORE.Contracts.IShoppingCartLineManager
     {
 
         /// <summary>
         /// constructor del manager de shopping cart de un usuario
         /// </summary>
         /// <param name="context"></param>
-        public IShoppingCartLineManager(IApplicationDbContext context) : base(context)
+        public ShoppingCartLineManager(IApplicationDbContext context) : base(context)
         {
 
         }
@@ -38,35 +38,35 @@ namespace EShop.Application
         }
 
 
-/*        public void AddToCart(Product product, string userId)
+        public void AddToCart(int productId, string userId)
         {
 
-            var product = productManager.GetById(idProduct);
-
-
-
-            var shoppingCartLineManager = new IShoppingCartLineManager(context);
-            var line = shoppingCartLineManager.GetByUserId(context.ShoppingCartLines)
-
-                            shoppingCartLineManager.GetByUserId(User.Identity.GetUserId()).FirstOrDefault(x => x.ProductId == product.Id);
-            if (line == null)
-            {
-                CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+            var product = Context.Products.Where(p => p.Id == productId).SingleOrDefault();
+            if (product != null)
+            {                
+                var line = GetByUserId(userId).FirstOrDefault(x => x.ProductId == product.Id);
+                if (line == null)
                 {
-                    UserId = User.Identity.GetUserId(),
-                    ProductId = idProduct,
-                    Quantity = 1
-                };
-                shoppingCartLineManager.Add(newLine);
+                    CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+                    {
+                        UserId = userId,
+                        ProductId = productId,
+                        Quantity = 1
+                    };
+                    Add(newLine);
+                }
+                else
+                {
+
+                    line.Quantity++;
+                }
+                Context.SaveChanges();
             }
             else
             {
-
-                line.Quantity++;
+                throw new Exception("Producto no encontrado");
             }
-            shoppingCartLineManager.Context.SaveChanges();
-
-        }*/
+        }
 
         //TODO: 1. obtener el shoppinglistcart de ese usuario y ese producto, 2. obtento 
         /*        public ShoppingCartLine AddToChart(int idProduct)
