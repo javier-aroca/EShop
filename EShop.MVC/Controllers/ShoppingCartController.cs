@@ -14,13 +14,14 @@ namespace EShop.MVC.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        IShoppingCartLineManager shoppingCartManager = null;
-
+        CORE.Contracts.IShoppingCartLineManager shoppingCartManager = null;
+        IProductManager productManager;
 
         public ShoppingCartController()
         {
             IApplicationDbContext context = new ApplicationDbContext();
-            this.shoppingCartManager = new ShoppingCartLineManager(context);
+            this.shoppingCartManager = new Application.IShoppingCartLineManager(context);
+            this.productManager = new ProductManager(context);
         }
 
         //Cuando tengamos IOC este constructor será el único que tendremos
@@ -142,5 +143,14 @@ namespace EShop.MVC.Controllers
                 return View();
             }
         }
+
+/*        //GET: ShoppingCart/AddToCartView/5
+        public ActionResult AddToCartView(int idProduct)
+        {
+            return View();
+
+        }*/
+
+        
     }
 }

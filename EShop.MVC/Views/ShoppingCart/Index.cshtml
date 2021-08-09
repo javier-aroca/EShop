@@ -56,6 +56,10 @@
 
 <p>
     @*@Html.ActionLink("Comprar", "Create")*@
-    <input type="submit" value="Confirmar compra" />
+    @*<input type="submit" value="Confirmar compra" />*@
+
+@*    <input type="button"
+           value="Confirmar compra"
+           onclick="location.href='@Url.Action("Create", "OrderCart", new Models.OrderListModel { idProduct = item.Id } )'" />*@
 
 </p>
