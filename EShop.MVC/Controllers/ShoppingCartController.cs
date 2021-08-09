@@ -20,7 +20,7 @@ namespace EShop.MVC.Controllers
         public ShoppingCartController()
         {
             IApplicationDbContext context = new ApplicationDbContext();
-            this.shoppingCartManager = new Application.IShoppingCartLineManager(context);
+            this.shoppingCartManager = new Application.ShoppingCartLineManager(context);
             this.productManager = new ProductManager(context);
         }
 
@@ -144,13 +144,12 @@ namespace EShop.MVC.Controllers
             }
         }
 
-/*        //GET: ShoppingCart/AddToCartView/5
-        public ActionResult AddToCartView(int idProduct)
+        public ActionResult SubstractFromCartView(int idProduct)
         {
             return View();
+        }
 
-        }*/
 
-        
+
     }
 }
