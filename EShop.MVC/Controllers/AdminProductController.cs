@@ -1,72 +1,65 @@
-﻿using EShop.DAL;
+﻿using EShop.Application;
+using EShop.CORE.Contracts;
+using EShop.DAL;
 using EShop.MVC.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using EShop.CORE.Contracts;
-using Microsoft.AspNet.Identity;
-using EShop.Application;
-using System.Data.Entity;
-//using Microsoft.AspNetCore.Mvc;
 
 namespace EShop.MVC.Controllers
 {
-    //[Authorize]
-    public class ProductController : Controller
+    [Authorize(Roles = "Admin")]
+    public class AdminProductController : Controller
     {
-        IProductManager productManager = null;
-        /*ILogEvent _log = null;*/
-        /*IApplicationDbContext context;*/
-        IShoppingCartLineManager shoppingCartLineManager = null;
 
-/*        /// <summary>
-        /// constructor del controlador de la vista de listado de productos
+        IProductManager productManager=null;
+        IApplicationDbContext context;
+
+
+        /// <summary>
+        /// constructor del controlador de la vista de administración de productos
         /// </summary>
-        /// <param name="productManager"></param>
-       public ProductController(IProductManager productManager)
+        public AdminProductController()
         {
-            this.productManager = productManager;
-        }*/
-
-        public ProductController() { } //test
-        
-        public ProductController(IProductManager productManager, IShoppingCartLineManager shoppingCartLineManager)
-        {
-            /*context = new ApplicationDbContext();*/
-            this.productManager = productManager; /*new ProductManager(context);*/
-            this.shoppingCartLineManager = shoppingCartLineManager; /*new ShoppingCartLineManager(context);*/
+            context = new ApplicationDbContext();
+            this.productManager = new ProductManager(context);
         }
 
-        
-        // GET: Product
+
+        // GET: AdminProduct
+        /// <summary>
+        /// Listado de productos para su administración
+        /// </summary>
+        /// <returns>ProductList</returns>
         public ActionResult Index()
         {
             var model = productManager.GetAll()
-                .Include(e => e.Images)
-                .Select(e => new ProductList
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    Price = e.Price,
-                    Stock = e.Stock
-                });
+            .Include(e => e.Images)
+            .Select(e => new ProductList
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Price = e.Price,
+                Stock = e.Stock
+            });
 
-             
             return View(model);
-
-
-
-
         }
 
-        // GET: Product/Details/5
+        // GET: AdminProduct/Details/5
+        /// <summary>
+        /// detalle del producto administrado
+        /// </summary>
+        /// <param name="id">id del producto</param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
             var product = productManager.GetById(id);
 
-            if (product!=null)
+            if (product != null)
             {
                 Models.ProductViewModel model = new Models.ProductViewModel
                 {
@@ -81,13 +74,18 @@ namespace EShop.MVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Product/Create
+        // GET: AdminProduct/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Product/Create
+        // POST: AdminProduct/Create
+        /// <summary>
+        /// creación de nuevo producto
+        /// </summary>
+        /// <param name="model">modelo de la vista del producto</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Models.ProductViewModel model)
         {
@@ -95,7 +93,7 @@ namespace EShop.MVC.Controllers
             {
                 CORE.Product product = new CORE.Product
                 {
-                    
+
                     Name = model.Name,
                     Price = model.Price,
                     Stock = model.Stock
@@ -112,7 +110,12 @@ namespace EShop.MVC.Controllers
             }
         }
 
-        // GET: Product/Edit/5
+        // GET: AdminProduct/Edit/5
+        /// <summary>
+        /// obtener los datos a modificar
+        /// </summary>
+        /// <param name="id">id del producto</param>
+        /// <returns></returns>
         public ActionResult Edit(int id)
         {
             var product = productManager.GetById(id);
@@ -128,11 +131,16 @@ namespace EShop.MVC.Controllers
                 return View(model);
             }
             return RedirectToAction("Index");
+        } 
 
 
-        }
-
-        // POST: Product/Edit/5
+        // POST: AdminProduct/Edit/5
+        /// <summary>
+        /// insertar los nuevos datos a modificar
+        /// </summary>
+        /// <param name="id">id del producto</param>
+        /// <param name="model">modelo de la vista de producto</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Edit(int id, Models.ProductViewModel model)
         {
@@ -161,6 +169,11 @@ namespace EShop.MVC.Controllers
         }
 
         // GET: Product/Delete/5
+        /// <summary>
+        /// elimina un producto según us id
+        /// </summary>
+        /// <param name="id">id del producto</param>
+        /// <returns></returns>
         public ActionResult Delete(int id)
         {
             var product = productManager.GetById(id);
@@ -179,10 +192,16 @@ namespace EShop.MVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            
+
         }
 
         // POST: Product/Delete/5
+        /// <summary>
+        /// elimina un producto
+        /// </summary>
+        /// <param name="id">id del producto</param>
+        /// <param name="model"> modelo de datos de la vista de producto </param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id, Models.ProductViewModel model)
         {
@@ -202,20 +221,6 @@ namespace EShop.MVC.Controllers
             {
                 return View();
             }
-        }
-
-
-        /// <summary>
-        /// añade un producto al carrito
-        /// </summary>
-        /// <param name="idProduct"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public JsonResult AddToCart(int idProduct)
-        {
-            shoppingCartLineManager.AddToCart(idProduct, User.Identity.GetUserId());
-            //return RedirectToAction("Index");
-            return Json("ok", JsonRequestBehavior.AllowGet);
         }
     }
 }

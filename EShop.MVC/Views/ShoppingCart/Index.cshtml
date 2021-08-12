@@ -10,12 +10,58 @@
 @*<p>
         @Html.ActionLink("Create New", "Create")
     </p>*@
+
+<script>
+    function isValidCard(cardNumber) {
+        var cardNumbersUpsideDown = cardNumber.split("").reverse(); // array de numeros al revés
+        var j = 1; // contador de posiciones pares (impares en js)
+        var sum = 0; // almacenar la suma de los numeros de la tarjeta
+        for (var i = 0; i < cardNumbersUpsideDown.length; i++) { // bucle para recorrer el array
+            cardNumbersUpsideDown[i] = parseInt(cardNumbersUpsideDown[i]); // convertir en un entero el número en esa posición
+
+            // si encontramos una posicion par (impar en js)
+            if (i === j) {
+                cardNumbersUpsideDown[j] *= 2; // multiplicar por 2 los numeros de las posiciones pares(impares en js)
+
+                if (cardNumbersUpsideDown[j] >= 10) { // si la multiplicación es mayor o igual a 10
+                    cardNumbersUpsideDown[j] = cardNumbersUpsideDown[j].toString(); // convertir el numero en string
+                    var separateNumbers = cardNumbersUpsideDown[j].split(''); // separar las cifras del numero
+                    //convertir las cifras en numeros enteros con parseInt
+                    separateNumbers[0] = parseInt(separateNumbers[0]);
+                    separateNumbers[1] = parseInt(separateNumbers[1]);
+                    cardNumbersUpsideDown[j] = separateNumbers[0] + separateNumbers[1]; // sumar las cifras
+                }
+                j += 2; // De lo contrario si la multiplicación es menor que 10 aumentar j en 2
+            }
+            sum += cardNumbersUpsideDown[i]; // suma de numeros en posiciones impares y nuevos numeros en posiciones pares
+        }
+        @*var messageToTheUser; // mensaje que se retornará al usuario
+        sum % 10 === 0 ? messageToTheUser = '¡Enhorabuena!La tarjeta de crédito es válida' :
+            messageToTheUser = 'Lo siento, pero la tarjeta que ingresaste es inválida';
+        return messageToTheUser; //retornar el mensaje*@
+        return sum % 10 === 0 ? true : false;
+    }
+
+
+    function onClickConfirmarCompra()
+    {
+        if (isValidCard(document.getElementById("cardNumber").value))
+        {
+            location.href = '/ShoppingCart/CreateOrder?address=' + document.getElementById('address').value;
+        }
+        else
+        {
+            alert("El número de tarjeta no es válido");
+        }
+    }
+</script>
+
 <table class="table">
     <tr>
-@*        <th>
-            <p>Borrar Producto</p>
+        @*        <th>
+                <p>Borrar Producto</p>
 
-        </th>*@
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Id)
         </th>
@@ -25,34 +71,48 @@
         <th>
             @Html.DisplayNameFor(model => model.Quantity)
         </th>
+@*        <th>
+            Total Producto
+        </th>*@
+        @*        <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>*@
         <th></th>
     </tr>
 
+  
+
     @foreach (var item in Model)
     {
-<tr>
-    <!--<td>-->
-        @*botón que borra un producto del carrito del cliente*@
-        <!--<input type="button"
-               value="Eliminar del carrito"
-               onclick="alert('Producto eliminado del carrito'); location.href='@Url.Action("SubstractFromCartView", "ShoppingCart", new { idShoppingCart= item.Id } )'" />
-    </td>-->
 
-    <td>
-        @Html.DisplayFor(modelItem => item.Id)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Product.Name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Quantity)
-    </td>
-    <td>
-       @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
-        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-    </td>
-</tr>
+@*        int lineTotal = Convert.ToInt32(item.Quantity * )*@
+        <tr>
+
+            @*< !--< td > -->*@
+            @*botón que borra un producto del carrito del cliente*@
+            <!--<input type="button"
+                       value="Eliminar del carrito"
+                       onclick="alert('Producto eliminado del carrito'); location.href='@Url.Action("SubstractFromCartView", "ShoppingCart", new { idShoppingCart = item.Id })'" />
+            </td>-->
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            @*    <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>*@
+            <td>
+                @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+         </tr>
     }
 
 </table>
@@ -60,9 +120,21 @@
 <p>
     @*@Html.ActionLink("Comprar", "Create")*@
     @*<input type="submit" value="Confirmar compra" />*@
-
-@*    <input type="button"
-           value="Confirmar compra"
-           onclick="location.href='@Url.Action("Create", "OrderCart", new Models.OrderListModel { idProduct = item.Id } )'" />*@
-
 </p>
+<p>Introduce la dirección para el envío</p>
+@*<input type="text" id="address" name="address">*@
+
+    @*@Html.TextBox("address", (string)ViewBag.Address);*@
+        <input type="text" id="address" name="address">
+        
+        <p>Indica tu número de tarjeta</p>
+        <input type="text" id="cardNumber" name="cardNumber">
+
+
+
+<input type="button"
+       value="Confirmar compra"
+       @*onclick="location.href = '@{Url.Action("CreateOrder", "ShoppingCart", }' + "new { address = " + document.Get'"*@
+        onclick="onClickConfirmarCompra()"
+       }); />
+

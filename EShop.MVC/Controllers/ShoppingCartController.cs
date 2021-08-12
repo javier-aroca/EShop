@@ -12,16 +12,27 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
+    [Authorize]
     public class ShoppingCartController : Controller
     {
-        CORE.Contracts.IShoppingCartLineManager shoppingCartManager = null;
-        IProductManager productManager;
+/*        CORE.Contracts.IShoppingCartLineManager shoppingCartManager = null;
+        CORE.Contracts.IOrderManager orderManager = null;
+        CORE.Contracts.IProductManager productManager = null;*/
+        /*IApplicationDbContext context;*/
+        /*IProductManager productManager;*/
+        IShoppingCartLineManager shoppingCartManager = null;
+        IOrderManager orderManager = null;
+        IProductManager productManager = null;
 
-        public ShoppingCartController()
+        
+        public ShoppingCartController() { } //test
+        
+        public ShoppingCartController(IShoppingCartLineManager shoppingCartManager, IOrderManager orderManager, IProductManager productManager)
         {
-            IApplicationDbContext context = new ApplicationDbContext();
-            this.shoppingCartManager = new Application.ShoppingCartLineManager(context);
-            this.productManager = new ProductManager(context);
+            /*context = new ApplicationDbContext();*/
+            this.shoppingCartManager = shoppingCartManager; /* new Application.ShoppingCartLineManager(context);*/
+            this.productManager = productManager; /*new ProductManager(context);*/
+            this.orderManager = orderManager; /* new OrderManager(context);*/
         }
 
         //Cuando tengamos IOC este constructor será el único que tendremos
@@ -43,7 +54,7 @@ namespace EShop.MVC.Controllers
                     Quantity = e.Quantity 
                 });
 
-            
+            ViewBag.Address = "DireccionPorDefecto";
             return View(model);
         }
 
@@ -150,6 +161,10 @@ namespace EShop.MVC.Controllers
         }
 
 
-
+        public ActionResult CreateOrder(string address)
+        {
+            orderManager.Create(User.Identity.GetUserId(), address);
+            return RedirectToAction("Index");
+        }
     }
 }

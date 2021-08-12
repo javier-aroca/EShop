@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EShop.Application
 {
@@ -14,7 +15,7 @@ namespace EShop.Application
     /// <summary>
     /// manager de carrito de compra
     /// </summary>
-    public class ShoppingCartLineManager : GenericManager<ShoppingCartLine>, CORE.Contracts.IShoppingCartLineManager
+    public class ShoppingCartLineManager : GenericManager<ShoppingCartLine>, IShoppingCartLineManager
     {
 
         /// <summary>
@@ -28,13 +29,13 @@ namespace EShop.Application
 
 
         /// <summary>
-        /// metodo que retorna todas las lineas de carrito de un usuario
+        /// metodo que retorna todas las lineas de carrito de un usuario. Si no hay stock suficiente del producto, informa al usuario.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         public IQueryable<ShoppingCartLine> GetByUserId(string userId)
         {
-            return Context.Set<ShoppingCartLine>().Where(e => e.UserId == userId);
+            return Context.Set<ShoppingCartLine>().Include("Product").Where(e => e.UserId == userId);
         }
 
 
@@ -42,62 +43,50 @@ namespace EShop.Application
         {
 
             var product = Context.Products.Where(p => p.Id == productId).SingleOrDefault();
-            if (product != null)
+            if (product != null && product.Stock>=1)
             {                
                 var line = GetByUserId(userId).FirstOrDefault(x => x.ProductId == product.Id);
-                if (line == null)
-                {
-                    CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+                if (product.Stock >= 1) { 
+                    if (line == null)
                     {
-                        UserId = userId,
-                        ProductId = productId,
-                        Quantity = 1
-                    };
-                    Add(newLine);
-                }
-                else
-                {
+                        CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+                        {
+                            UserId = userId,
+                            ProductId = productId,
+                            Quantity = 1
+                        };
+                        Add(newLine);
+                    }
+                    else
+                    {
 
-                    line.Quantity++;
+                        line.Quantity++;
+                    }
                 }
+                product.Stock--;
                 Context.SaveChanges();
             }
             else
             {
-                throw new Exception("Producto no encontrado");
+                if (product.Stock == 0)
+                {
+                    // inicializar las variables para el metodo MessageBox.Show
+                    string message = "Stock insuficiente";
+                    string caption = "Error";
+                    MessageBoxButtons buttons = MessageBoxButtons.OK;
+                    DialogResult result;
+
+                    // mostrar el MessageBox.
+                    result = MessageBox.Show(message, caption, buttons);
+
+                }
+                else
+                {
+                    throw new Exception("Producto no encontrado");
+                }
+                
             }
         }
-
-        //TODO: 1. obtener el shoppinglistcart de ese usuario y ese producto, 2. obtento 
-        /*        public ShoppingCartLine AddToChart(int idProduct)
-                {
-
-                    var product = Context.Set<Product>().Where(e => e.Id == idProduct);
-
-
-                    if (product != null)
-                    {
-                        ShoppingCartLine line = 
-                        *//*var line = shoppingCartManager.GetByUserId(User.Identity.GetUserId()).FirstOrDefault(x => x.ProductId == idProduct);*//*
-                        if (line == null)
-                        {
-                            CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
-                            {
-                                UserId = User.Identity.GetUserId(),
-                                ProductId = idProduct,
-                                Quantity = 1
-                            };
-                            shoppingCartManager.Add(newLine);
-                        }
-                        else
-                        {
-
-                            line.Quantity++;
-                        }
-                        shoppingCartManager.Context.SaveChanges();
-                    }
-                    return (line);
-                }*/
 
 
     }

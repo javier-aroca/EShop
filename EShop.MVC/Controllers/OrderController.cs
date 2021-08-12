@@ -2,6 +2,7 @@
 using EShop.CORE.Contracts;
 using EShop.DAL;
 using EShop.MVC.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,23 +12,27 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
 
         IOrderManager orderManager = null;
         
-        public OrderController()
+        //public OrderController() { } //test
+        
+        public OrderController(IOrderManager orderManager)
         {
-            IApplicationDbContext context = new ApplicationDbContext();
-            this.orderManager = new OrderManager(context);
+            /*IApplicationDbContext context = new ApplicationDbContext();*/
+            this.orderManager = orderManager; /* new OrderManager(context);*/
         }
         
 
 
         // GET: Order
         public ActionResult Index()
-        {
-            var model = orderManager.GetAll()
+        {            
+            var model = orderManager.GetByUserId(User.Identity.GetUserId())
+                /*.Where(e => e.Status == CORE.OrderStatus.Pendiente)*/
                 .Include(e => e.OrderLines)
                 .Select(e => new OrderListModel
                 {
@@ -47,7 +52,19 @@ namespace EShop.MVC.Controllers
         // GET: Order/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var order = orderManager.GetById(id);
+
+            Models.OrderViewModel model = new Models.OrderViewModel
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                CreateDate = order.CreateDate,
+                DeliveryAddress = order.DeliveryAddress,
+                Status = order.Status,
+                
+            };
+
+            return View(model);
         }
 
         // GET: Order/Create
