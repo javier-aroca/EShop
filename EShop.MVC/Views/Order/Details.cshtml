@@ -1,0 +1,75 @@
+﻿@model EShop.MVC.Models.OrderViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>OrderViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreateDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryAddress)
+        </dd>
+
+    </dl>
+</div>
+
+<table>
+    <tr>
+        <th>
+            ProductName
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Quantity
+        </th>
+
+    </tr>
+
+    @foreach (var item in Model.OrderLines)
+            {
+<tr>
+    <td>@item.ProductName</td>
+    <td>@item.Price</td>
+    <td>@item.Quantity</td>
+    
+</tr>
+            }
+</table>
+<p>
+    
+    @Html.ActionLink("Listado de pedidos", "Index")
+</p>

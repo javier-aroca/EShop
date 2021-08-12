@@ -1,13 +1,14 @@
-﻿@model EShop.MVC.Models.ProductViewModel
+﻿@using EShop.MVC.Models
+@model ProductViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Detalle del producto</h2>
+<h2>Detalle de producto</h2>
 
 <div>
-
+@*    <h4>ProductViewModel</h4>*@
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -38,5 +39,5 @@
 </div>
 <p>
     @Html.ActionLink("Modificar", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Listado de productos", "Index")
+    @Html.ActionLink("Administración de Productos", "Index")
 </p>

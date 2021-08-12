@@ -42,6 +42,7 @@ namespace EShop.MVC.Models
         /// <summary>
         /// collección de lineas de pedido
         /// </summary>
-        public List<OrderLine> OrderLines { get; set; }
+        public virtual List<OrderLine> OrderLines { get; set; }
+        /* public virtual ICollection<OrderLine> OrderDetails { get; set; }*/
     }
 }
