@@ -52,6 +52,7 @@ namespace EShop.Application
         public void Create(string userId, string deliveryAdress)
         {
             ShoppingCartLineManager shoppingCartLineManager = new ShoppingCartLineManager(context);
+            
 
             Order newOrder = new Order()
             {
@@ -61,7 +62,7 @@ namespace EShop.Application
                 DeliveryAddress = deliveryAdress,
                 OrderLines = new List<OrderLine>()
             };
-            Context.Set<Order>().Add(newOrder);
+            //Context.Set<Order>().Add(newOrder);
 
             foreach (ShoppingCartLine shoppingCartLine in shoppingCartLineManager.GetByUserId(userId))
             {
@@ -72,12 +73,19 @@ namespace EShop.Application
                     Quantity = shoppingCartLine.Quantity
                 };
                 
-                Context.Set<OrderLine>().Add(line);
+                //Context.Set<OrderLine>().Add(line);
                 newOrder.OrderLines.Add(line);
                 Context.Set<ShoppingCartLine>().Remove(shoppingCartLine);
             }
+            Context.Set<Order>().Add(newOrder);
 
             context.SaveChanges();
         }
+
+
+/*        private void sendEmail(string mailAddress)
+        {
+           
+        }*/
     }
 }

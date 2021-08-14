@@ -18,7 +18,7 @@ namespace EShop.MVC.Models
         /// </summary>
         public int Id { get; set; }
 
-/*        /// <summary>
+        /// <summary>
         /// Usuario que ha creado la incidencia
         /// </summary>
         public ApplicationUser User { get; set; }
@@ -27,18 +27,18 @@ namespace EShop.MVC.Models
         /// Identificador del usuario que ha creado la incidencia
         /// </summary>
         [ForeignKey("User")]
-        public string UserId { get; set; }*/
+        public string UserId { get; set; }
 
         /// <summary>
         /// producto que incluye en el carrito
         /// </summary>
-        [Display(Name = "Producto")] 
+        [Display(Name = "Producto")]
         public Product Product { get; set; }
 
-/*        /// <summary>
+        /// <summary>
         /// identificador del producto que se incluye en el carrito
         /// </summary>
-        [ForeignKey("Product")]
+/*        [ForeignKey("Product")]
         public int ProductId { get; set; }*/
 
         /// <summary>

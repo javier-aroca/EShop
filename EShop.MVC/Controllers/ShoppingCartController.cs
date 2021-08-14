@@ -15,18 +15,24 @@ namespace EShop.MVC.Controllers
     [Authorize]
     public class ShoppingCartController : Controller
     {
-/*        CORE.Contracts.IShoppingCartLineManager shoppingCartManager = null;
-        CORE.Contracts.IOrderManager orderManager = null;
-        CORE.Contracts.IProductManager productManager = null;*/
-        /*IApplicationDbContext context;*/
-        /*IProductManager productManager;*/
+
+       
         IShoppingCartLineManager shoppingCartManager = null;
         IOrderManager orderManager = null;
         IProductManager productManager = null;
 
         
-        public ShoppingCartController() { } //test
+        /// <summary>
+        /// constructor vacio - para unity
+        /// </summary>
+        public ShoppingCartController() { } 
         
+        /// <summary>
+        /// constructor 
+        /// </summary>
+        /// <param name="shoppingCartManager"></param>
+        /// <param name="orderManager"></param>
+        /// <param name="productManager"></param>
         public ShoppingCartController(IShoppingCartLineManager shoppingCartManager, IOrderManager orderManager, IProductManager productManager)
         {
             /*context = new ApplicationDbContext();*/
@@ -35,14 +41,12 @@ namespace EShop.MVC.Controllers
             this.orderManager = orderManager; /* new OrderManager(context);*/
         }
 
-        //Cuando tengamos IOC este constructor será el único que tendremos
-        //public ShoppingCartController( IShoppingCartLineManager shoppingCartManager)
-        //{
-        //    this.shoppingCartManager = shoppingCartManager;
-        //}
-
 
         // GET: ShoppingCart
+        /// <summary>
+        /// listado de lineas de pedido del usuario
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
 
@@ -54,14 +58,32 @@ namespace EShop.MVC.Controllers
                     Quantity = e.Quantity 
                 });
 
-            ViewBag.Address = "DireccionPorDefecto";
+            //ViewBag.Address = "DireccionPorDefecto";
             return View(model);
         }
 
         // GET: ShoppingCart/Details/5
+        /// <summary>
+        /// devuelve los detalles de la linea de carrito
+        /// </summary>
+        /// <param name="id">id del carrito</param>
+        /// <returns></returns>
         public ActionResult Details(int id)
         {
-            return View();
+            var shoppingCart = shoppingCartManager.GetById(id);
+
+                ShoppingCartList model = new ShoppingCartList
+                {
+                    Id = shoppingCart.Id,
+                    Product = shoppingCart.Product,
+                    Quantity = shoppingCart.Quantity
+
+
+                };
+
+                
+
+            return View(model);
         }
 
         // GET: ShoppingCart/Create
@@ -97,19 +119,6 @@ namespace EShop.MVC.Controllers
 
 
 
-/*        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
 
         // GET: ShoppingCart/Edit/5
         public ActionResult Edit(int id)
@@ -134,18 +143,46 @@ namespace EShop.MVC.Controllers
         }
 
         // GET: ShoppingCart/Delete/5
+        /// <summary>
+        /// recibe la vista a borrar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult Delete(int id)
         {
-            return View();
+            var shoppingCart = shoppingCartManager.GetById(id);
+            if (shoppingCartManager != null)
+            {
+                Models.ShoppingCartList model = new Models.ShoppingCartList
+                {
+                    Id = shoppingCart.Id,
+                    Product = shoppingCart.Product,
+                    Quantity = shoppingCart.Quantity
+
+
+                };
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
         // POST: ShoppingCart/Delete/5
+        /// <summary>
+        /// envía la vista que se va a borrar
+        /// </summary>
+        /// <param name="id">id del carrito</param>
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
+                var shoppingCart = shoppingCartManager.GetById(id);
+                if (shoppingCart != null)
+                {
+                    shoppingCartManager.Remove(shoppingCart);
+                    shoppingCartManager.Context.SaveChanges();
+                }
 
                 return RedirectToAction("Index");
             }
@@ -161,8 +198,14 @@ namespace EShop.MVC.Controllers
         }
 
 
+        /// <summary>
+        /// crea una orden de pedido desde las lineas del carrito
+        /// </summary>
+        /// <param name="address">direccion para el pedido</param>
+        /// <returns></returns>
         public ActionResult CreateOrder(string address)
         {
+            
             orderManager.Create(User.Identity.GetUserId(), address);
             return RedirectToAction("Index");
         }

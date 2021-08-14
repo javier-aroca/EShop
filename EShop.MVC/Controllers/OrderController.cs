@@ -61,7 +61,7 @@ namespace EShop.MVC.Controllers
                 CreateDate = order.CreateDate,
                 DeliveryAddress = order.DeliveryAddress,
                 Status = order.Status,
-                
+                OrderLines = order.OrderLines
             };
 
             return View(model);
