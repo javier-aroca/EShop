@@ -29,7 +29,7 @@ namespace EShop.Application
 
 
         /// <summary>
-        /// metodo que retorna todas las lineas de carrito de un usuario. Si no hay stock suficiente del producto, informa al usuario.
+        /// metodo que retorna todas las lineas de carrito de un usuario logeado. Si no hay stock suficiente del producto, informa al usuario.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -43,48 +43,65 @@ namespace EShop.Application
         {
 
             var product = Context.Products.Where(p => p.Id == productId).SingleOrDefault();
-            if (product != null && product.Stock>=1)
-            {                
-                var line = GetByUserId(userId).FirstOrDefault(x => x.ProductId == product.Id);
-                if (product.Stock >= 1) { 
-                    if (line == null)
-                    {
-                        CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
-                        {
-                            UserId = userId,
-                            ProductId = productId,
-                            Quantity = 1
-                        };
-                        Add(newLine);
-                    }
-                    else
-                    {
 
-                        line.Quantity++;
-                    }
-                }
-                product.Stock--;
-                Context.SaveChanges();
-            }
-            else
+            if (userId != null)
             {
-                if (product.Stock == 0)
+
+                if (product != null && product.Stock >= 1)
                 {
-                    // inicializar las variables para el metodo MessageBox.Show
-                    string message = "Stock insuficiente";
-                    string caption = "Error";
-                    MessageBoxButtons buttons = MessageBoxButtons.OK;
-                    DialogResult result;
+                    var line = GetByUserId(userId).FirstOrDefault(x => x.ProductId == product.Id);
+                    if (product.Stock >= 1)
+                    {
+                        if (line == null)
+                        {
+                            CORE.ShoppingCartLine newLine = new CORE.ShoppingCartLine()
+                            {
+                                UserId = userId,
+                                ProductId = productId,
+                                Quantity = 1
+                            };
+                            Add(newLine);
+                        }
+                        else
+                        {
 
-                    // mostrar el MessageBox.
-                    result = MessageBox.Show(message, caption, buttons);
-
+                            line.Quantity++;
+                        }
+                    }
+                    product.Stock--;
+                    Context.SaveChanges();
                 }
                 else
                 {
-                    throw new Exception("Producto no encontrado");
+                    if (product.Stock == 0)
+                    {
+                        // inicializar las variables para el metodo MessageBox.Show
+                        string message = "Stock insuficiente";
+                        string caption = "Error";
+                        MessageBoxButtons buttons = MessageBoxButtons.OK;
+                        DialogResult result;
+
+                        // mostrar el MessageBox.
+                        result = MessageBox.Show(message, caption, buttons);
+
+                    }
+                    else
+                    {
+                        throw new Exception("Producto no encontrado");
+                    }
+
                 }
-                
+            }
+            else
+            {
+                // inicializar las variables para el metodo MessageBox.Show
+                string message = "Es necesario iniciar sesión para reservar productos";
+                string caption = "Error";
+                MessageBoxButtons buttons = MessageBoxButtons.OK;
+                DialogResult result;
+
+                // mostrar el MessageBox.
+                result = MessageBox.Show(message, caption, buttons);
             }
         }
 
