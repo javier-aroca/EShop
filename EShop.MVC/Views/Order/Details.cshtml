@@ -4,26 +4,13 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalle del pedido</h2>
 
 <div>
-    <h4>OrderViewModel</h4>
+
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserId)
         </dd>
 
         <dt>
@@ -45,31 +32,72 @@
     </dl>
 </div>
 
-<table>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;margin:0px auto;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-sltr{background-color:#4472C4;color:#FFF;font-weight:bold;text-align:left;vertical-align:bottom}
+.tg .tg-3jyw{background-color:#4472C4;border-color:inherit;color:#FFF;font-weight:bold;text-align:left;vertical-align:bottom}
+.tg .tg-4qup{background-color:#D9E1F2;text-align:left;vertical-align:bottom}
+.tg .tg-7zrl{text-align:left;vertical-align:bottom}
+.tg {width: auto !important;}.tg col {width: auto !important;}.tg-wrap {overflow-x: auto;-webkit-overflow-scrolling: touch;margin: auto 0px;}
+</style>
+<div class="tg-wrap">
+    <table class="tg">
+        <thead>
+            <tr>
+                <th class="tg-3jyw"><span style="font-weight:700;text-decoration:none;color:white;background-color:#4472C4">Producto</span></th>
+                <th class="tg-3jyw"><span style="font-weight:700;text-decoration:none;color:white;background-color:#4472C4">Precio</span></th>
+                <th class="tg-3jyw"><span style="font-weight:700;text-decoration:none;color:white;background-color:#4472C4">Cantidad</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderLines)
+            {
+                <tr>
+                    <td class="tg-4qup"><span style="font-weight:400;text-decoration:none;color:black;background-color:#D9E1F2">@item.ProductName</span></td>
+                    <td class="tg-4qup"><span style="font-weight:400;text-decoration:none;color:black;background-color:#D9E1F2">@item.Price</span></td>
+                    <td class="tg-4qup"><span style="font-weight:400;text-decoration:none;color:black;background-color:#D9E1F2">@item.Quantity</span></td>
+                    
+                </tr>
+            }
+            </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+@*<table>
     <tr>
         <th>
-            ProductName
+            Producto
         </th>
         <th>
-            Price
+            Precio
         </th>
         <th>
-            Quantity
+            Cantidad
         </th>
 
     </tr>
 
     @foreach (var item in Model.OrderLines)
-            {
-<tr>
-    <td>@item.ProductName</td>
-    <td>@item.Price</td>
-    <td>@item.Quantity</td>
-    
-</tr>
-            }
-</table>
+    {
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.Price</td>
+            <td>@item.Quantity</td>
+
+        </tr>
+    }
+</table>*@
 <p>
-    
+
     @Html.ActionLink("Listado de pedidos", "Index")
 </p>

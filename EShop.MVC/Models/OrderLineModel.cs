@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -15,16 +16,19 @@ namespace EShop.MVC.Models
         /// <summary>
         /// nombre del producto
         /// </summary>
+        [Display(Name = "Producto")] 
         public string ProductName { get; set; }
 
         /// <summary>
         /// precio del producto
         /// </summary>
+        [Display(Name = "Precio")] 
         public decimal Price { get; set; }
 
         /// <summary>
         /// cantidad del producto
         /// </summary>
+        [Display(Name = "Cantidad")] 
         public int Quantity { get; set; }
 
         /// <summary>

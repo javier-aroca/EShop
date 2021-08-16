@@ -1,120 +1,163 @@
-﻿@using EShop.MVC.Models
-@model IEnumerable<ProductList>
+﻿@using EShop.CORE
+@model IEnumerable<Product>
 
 @{
     ViewBag.Title = "Index";
 }
 
+<head>
+    <style>
+        .item {
+            width: auto; /* or whatever width you want. */
+            height: 150px;
+            max-height: 150px;
+            display: inline-block;
+        }
 
+        .delete {
+            border: none;
+            outline: 0;
+            padding: 12px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            max-width: 303px;
+        }
 
-<h2>Productos Disponibles</h2>
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+            font-family: arial;
+        }
 
-@*<p>
-        @Html.ActionLink("Create New", "Create")
-    </p>*@
-<table class="table">
-    <tr>
-        <th>
-            <p>Reservar productos</p>
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Stock)
-        </th>
-        @*        <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>*@
-    </tr>
+        .price {
+            color: grey;
+            font-size: 22px;
+        }
 
+        .card button {
+            border: none;
+            outline: 0;
+            padding: 12px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+        }
 
+            .card button:hover {
+                opacity: 0.7;
+            }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="./src/bootstrap-input-spinner.js"></script>
 
+</head>
+
+<body>
+    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <p class="btn" style="margin-top: 27px;">
+            <input onclick="location.href='@Url.Action("Create", "Product")'" class="btn btn-dark btn-lg w-75" name="create new" value="Nuevo producto">
+        </p>
+
+    }
+    @{ int c = 0;
+    }
+    
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @*botón que añade un producto al carrito del cliente*@
-                @*<input type="button"
-                    value="Añadir al carrito"
-                    onclick="alert('Producto añadido al carrito'); location.href='@Url.Action("AddToCartView", "Product", new { idProduct = item.Id } )'" />*@
+        if (c % 3 == 0)
+        {
+            <div class="row px-5 pt-5">
+            </div>
+
+        }
+        c++;
+
+        <div class="col-lg-4 col-md-4">
+            <div class="card">
+                <div id="myCarousel" class="fixed-img carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img src=@item.Images[0].Path>
+
+                        </div>
+                        @for (int i = 1; i < item.Images.Count; i++)
+                        {
+                            var imag = item.Images[i];
+                            <div class="item">
+                                <img src=@imag.Path alt=@imag.Path>
+                            </div>
+                        }
+                    </div>
+
+                </div>
 
 
-                <input type="button"
-                       value="Añadir al carrito"
-                       onclick="addToCart(@Html.DisplayFor(modelItem => item.Id));" />
-                @*//linkText, actionName, controllerName, routeValues, htmlAttributes*@
-                @*@Html.ActionLink("AñadirCarrito", "AddToCart", "ShoppingCart", new { id = item.Id }, "Index")*@
-                @* <a href="@Url.Action("AddToCart", "AddToCart", new { id = item.Id , url="Index" })">
-
-                    </a>*@
+                <h1>@Html.DisplayFor(modelItem => item.Name)</h1>
+                <p class="price"> € @Html.DisplayFor(modelItem => item.Price)</p>
 
 
-                @*@Html.ActionLink("AddToCart", "AddToCart", "ShoppingCart", new { idProduct = item.Id }))*@
-            </td>
+
+                <form method="get" action="@Url.Action("AddToCart", "Product")">
+                    <input hidden name="id" value=@item.Id />
+                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {<p class="price">En Stock : @Html.DisplayFor(modelItem => item.Stock)</p>}
+
+                else if (@User.Identity.IsAuthenticated)
+                {
+                    <input id="quantity" type="number" name="quantity" value="1" style="margin: 12px;" min="1" max=@item.Stock step="1" />
+
+                    if (item.Stock > 0)
+                    {
+                        <input class="delete" type="submit" value="Añadir al carrito" />
+
+                    }
+                    else
+                    {
+                        <input class="delete" disabled type="submit" style="border: 1px solid #999999;
+                                                                              background-color: #cccccc;
+                                                                              color: #666666;" value="Sin Stock" />
+
+                    }
+
+                }
 
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            @*    <td>
-                    @Html.DisplayFor(modelItem => item.Image)
-                </td>*@
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
-                @Html.ActionLink("Detalle", "Details", new { id = item.Id })
-                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
-            </td>
-        </tr>
+                </form>
+
+                @* <input type="submit" onclick="location.href='@Url.Action("AddCart", "Products", new { id = item.Id })'" class="delete" value="Add to cart">*@
+
+                @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+
+
+
+                    <input type="submit" onclick="location.href='@Url.Action("Edit", "Product", new { id = item.Id})'" class="delete" value="Modificar">
+                    <p></p>
+                    <input type="submit" onclick="location.href='@Url.Action("Delete", "Product", new { id = item.Id})'" class="delete" value="Borrar">
+                }
+            </div>
+
+
+        </div>
     }
 
-</table>
-
-<script>
-    function addToCart(idProduct)
-    {
-        //debugger;
-        @*var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            debugger;
-            if (this.readyState == 4 && this.status == 200) {
-                alert('Producto añadido al carrito');
-            }
-            else
-            {
-                alert('Hay algun error de conexión con el servidor');
-            }
-        };
-        xhttp.open("POST", "AddToCart?idProduct=" + idProduct, true);
-        xhttp.send();*@
-
-        debugger;
-        $.ajax({
-            type: "POST", // la variable type guarda el tipo de la peticion GET,POST,..
-            url: "/Product/AddToCart", //url guarda la ruta hacia donde se hace la peticion
-            data: { idProduct: idProduct }, // data recibe un objeto con la informacion que se enviara al servidor
-            success: function (datos) { //success es una funcion que se utiliza si el servidor retorna informacion
-                //console.log(datos.promedio)
-                @*alert('Producto añadido al carrito');*@
-                location.href="/Product/Index"
-            }//,
-            //dataType: dataType // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
-        })
-    }
+    
 
 
-</script>
+</body>
 
-@*<p>
-        @Html.ActionLink("Create New", "Create")
-        @Html.
-    </p>*@

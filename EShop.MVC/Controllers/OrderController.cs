@@ -30,7 +30,7 @@ namespace EShop.MVC.Controllers
 
         // GET: Order
         public ActionResult Index()
-        {            
+        {
             var model = orderManager.GetByUserId(User.Identity.GetUserId())
                 /*.Where(e => e.Status == CORE.OrderStatus.Pendiente)*/
                 .Include(e => e.OrderLines)
@@ -57,7 +57,7 @@ namespace EShop.MVC.Controllers
             Models.OrderViewModel model = new Models.OrderViewModel
             {
                 Id = order.Id,
-                UserId = order.UserId,
+                
                 CreateDate = order.CreateDate,
                 DeliveryAddress = order.DeliveryAddress,
                 Status = order.Status,

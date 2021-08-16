@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -18,14 +17,29 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("EShop", "Index", "Product", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav " style="flex-direction: row !important;">
+                    ">
                     <li>@Html.ActionLink("Inicio", "Index", "Product")</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
                     
+
+
+                    @if (@User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Mi carrito", "Index", "ShoppingCart")</li>
+
+                        <li>@Html.ActionLink("Mis pedidos", "Index", "Order")</li>
+                    }
+
+
+                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+
+                    {
+                        <li>@Html.ActionLink("Users", "Index", "AppUsers")</li>
+                        <li>@Html.ActionLink("Roles", "Index", "RolesApps")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -33,10 +47,7 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Javier AROCA</p>
-        </footer>
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -44,3 +55,9 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
+
+
+
+
+

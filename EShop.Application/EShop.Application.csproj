@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageManager.cs" />
     <Compile Include="ProductManager.cs" />
     <Compile Include="GenericManager.cs" />
     <Compile Include="OrderManager.cs" />
