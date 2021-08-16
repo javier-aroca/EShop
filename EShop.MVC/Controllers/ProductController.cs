@@ -43,7 +43,7 @@ namespace EShop.MVC.Controllers
         // GET: Product
         public ActionResult Index()
         {
-            var model = productManager.GetAll()
+           /* var model = productManager.GetAll()
                 .Include(e => e.Images)
                 .Select(e => new ProductList
                 {
@@ -51,10 +51,10 @@ namespace EShop.MVC.Controllers
                     Name = e.Name,
                     Price = e.Price,
                     Stock = e.Stock
-                });
+                });*/
 
              
-            return View(model);
+            return View(productManager.GetAll());
 
 
 
@@ -206,16 +206,22 @@ namespace EShop.MVC.Controllers
 
 
         /// <summary>
-        /// añade un producto al carrito
+        /// añade la cantidad del producto al carrito
         /// </summary>
-        /// <param name="idProduct"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
-        public JsonResult AddToCart(int idProduct)
+        //[HttpPost]
+        public ActionResult AddToCart(int id, int quantity)
         {
-            shoppingCartLineManager.AddToCart(idProduct, User.Identity.GetUserId());
-            //return RedirectToAction("Index");
-            return Json("ok", JsonRequestBehavior.AllowGet);
+
+
+            for (int i = 1; i<= quantity; i++) 
+            {
+            shoppingCartLineManager.AddToCart(id, User.Identity.GetUserId());
+            }
+            return RedirectToAction("Index");
+
         }
+
     }
 }

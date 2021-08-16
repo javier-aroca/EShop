@@ -57,6 +57,7 @@
     <Compile Include="ApplicationUser.cs" />
     <Compile Include="Contracts\IApplicationDbContext.cs" />
     <Compile Include="Contracts\IGenericManager.cs" />
+    <Compile Include="Contracts\IImageManager.cs" />
     <Compile Include="Contracts\IProductManager.cs" />
     <Compile Include="Contracts\IOrderManager.cs" />
     <Compile Include="Contracts\IShoppingCartLineManager.cs" />
