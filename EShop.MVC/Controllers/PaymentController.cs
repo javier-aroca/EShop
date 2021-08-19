@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize]
+    [Authorize]//usarios registrados
     public class PaymentController : Controller
     {
         // GET: Payment

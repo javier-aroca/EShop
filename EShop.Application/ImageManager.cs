@@ -24,22 +24,5 @@ namespace EShop.Application
         }
 
 
-/*        public void Edit(Image image)
-        {
-            Context.Entry(image).State = EntityState.Modified;
-            Context.SaveChanges();
-        }
-
-        public void Delete(int id)
-        {
-            Image image = Context.Images.Find(id);
-            if (image != null)
-            {
-                Remove(image);
-                Context.SaveChanges();
-
-            }
-
-        }*/
     }
 }

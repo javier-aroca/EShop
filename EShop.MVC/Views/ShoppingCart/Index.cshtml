@@ -1,5 +1,4 @@
 ﻿@using EShop.MVC.Models
-@using EShop.MVC.Models
 @model IEnumerable<ShoppingCartList>
 
 @{
@@ -10,8 +9,31 @@
 
 
 <script>
-    // script que valida la tarjeta segun algoritmo de Luhn
-    function isValidCard(cardNumber) {
+
+    // scripts que validan la tarjeta segun algoritmo de Luhn.
+    // No es lógica de negocio, así que considero que no es necesario llevarlo a CORE
+
+    function validDate(dValue) {// valida que la fecha de vencimiento sea MM/YY
+        var result = false;
+        dValue = dValue.split('/');
+        var pattern = /^\d{2}$/;
+
+        if (dValue[0] < 1 || dValue[0] > 12)
+            result = true;
+
+        if (!pattern.test(dValue[0]) || !pattern.test(dValue[1]))
+            result = true;
+
+        if (dValue[2])
+            result = true;
+
+        if (result) alert("Introduce la fecha en formato MM/YY.");
+        return result;
+    }
+
+
+    function isValidCard(cardNumber)//valida segun algoritmo de Luhn
+    {
         var cardNumbersUpsideDown = cardNumber.split("").reverse(); // array de numeros al revés
         var j = 1; // contador de posiciones pares (impares en js)
         var sum = 0; // almacenar la suma de los numeros de la tarjeta
@@ -39,50 +61,49 @@
             messageToTheUser = 'Tarjeta de crédito no válida';
         return messageToTheUser; //retornar el mensaje
 
-        //TODO: procesar el no pago del TPV
         return sum % 10 === 0 ? true : false;
     }
 
 
+    //valida el pago de la compra
     function onClickConfirmarCompra()
     {
-        debugger;
-        if (true /*Date.parse(document.getElementById("cardDate").value) > new Date()*/) {
-            if (isValidCard(document.getElementById("cardNumber").value) && (parseInt(document.getElementById("cardNumber").value) % 2 == 0)) {
-                location.href = '/ShoppingCart/CreateOrder?address=' + document.getElementById('address').value;
+
+        if (!validDate(document.getElementById("cardDate").value))//la fecha de caducidad es MM/AA
+        {
+            if (isValidCard(document.getElementById("cardNumber").value))//algoritmo de Luhn
+            {
+                if (parseInt(document.getElementById("cardNumber").value) % 2 == 0)//tarjeta par=pago correcto
+                {
+                    location.href = '/ShoppingCart/CreateOrder?address=' + document.getElementById('address').value;//paso la dirección como parámetro
+                }
+                else
+                {
+                    alert("La tarjeta ha sido rechazada");//tarjeta impar= pago rechazado
+                }
             }
-            else {//TODO: if (parseInt(document.getElementById("cardNumber").value) % 2 != 0)
-                alert("El número de tarjeta no es válido");
+            else
+            {
+                alert("El número de tarjeta no es válido");//Luhn incorrecto
             }
         }
-        else {
-            alert("La tarjeta no es válida o está caducada");
-        }
-        
+        else
+        {
+            alert("La tarjeta tiene un formato de fecha incorrecto");//fecha incorrecta
+        }        
     }
 </script>
 
 <table class="table">
     <tr>
-        @*        <th>
-                <p>Borrar Producto</p>
 
-            </th>*@
-@*        <th>
-            @Html.DisplayNameFor(model => model.Id)
-        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Product)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Quantity)
         </th>
-@*        <th>
-            Total Producto
-        </th>*@
-        @*        <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>*@
+
         <th></th>
     </tr>
 
@@ -90,20 +111,7 @@
 
     @foreach (var item in Model)
     {
-
-@*        int lineTotal = Convert.ToInt32(item.Quantity * )*@
         <tr>
-
-            @*< !--< td > -->*@
-            @*botón que borra un producto del carrito del cliente*@
-            <!--<input type="button"
-                       value="Eliminar del carrito"
-                       onclick="alert('Producto eliminado del carrito'); location.href='@Url.Action("SubstractFromCartView", "ShoppingCart", new { idShoppingCart = item.Id })'" />
-            </td>-->
-
-@*            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Name) 
                 
@@ -111,12 +119,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            @*    <td>
-                    @Html.DisplayFor(modelItem => item.Amount)
-                </td>*@
+
             <td>
-                @* @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
-             @*   @Html.ActionLink("Detalle", "Details", new { id = item.Id }) |*@
+
                 @Html.ActionLink("Eliminar", "Delete", new { id = item.Id })
             </td>
          </tr>
@@ -125,7 +130,7 @@
 </table>
 
 
-<dl>
+<dl> @*datos para envío y pago*@
     <p><label for="address">Dirección de envío:</label></p>
 
     <p><input type="text" id="address" name="address"></p>
@@ -137,9 +142,11 @@
     <p><input type="text" id="cardDate" name="cardDate"></p>
 </dl>
 
+@*boton de confirmar compra*@
 <input type="button"
        value="Confirmar compra"
-       @*onclick="location.href = '@{Url.Action("CreateOrder", "ShoppingCart", }' + "new { address = " + document.Get'"*@
-        onclick="onClickConfirmarCompra()"
+       onclick="onClickConfirmarCompra()"
        }); />
+
+
 

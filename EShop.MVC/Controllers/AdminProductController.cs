@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]//acceso a rol admin
     public class AdminProductController : Controller
     {
 

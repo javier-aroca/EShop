@@ -1,4 +1,4 @@
-//using EShop.IFR.IoC;
+//using EShop.IFR.IoC; // no me funciona la implementación desde IFR
 using System.Linq;
 using System.Web.Mvc;
 

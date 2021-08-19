@@ -36,7 +36,7 @@ namespace EShop.MVC.Models
         /// <summary>
         /// Lista de imagenes del producto
         /// </summary>
-        [Display(Name = "Imágenes")]
+        [Display(Name = "Imagenes")]
         public Image Image { get; set; }
     
 }

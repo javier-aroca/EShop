@@ -10,7 +10,7 @@ using EShop.MVC.Models;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize]
+    [Authorize] //usuarios registrados
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

@@ -17,7 +17,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @*@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav " style="flex-direction: row !important;">
@@ -26,7 +26,7 @@
                     
 
 
-                    @if (@User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                    @if (@User.Identity.IsAuthenticated && !User.IsInRole("Admin"))//user tiene carrito y pedidos
                     {
                         <li>@Html.ActionLink("Mi carrito", "Index", "ShoppingCart")</li>
 
@@ -34,11 +34,11 @@
                     }
 
 
-                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))//admin
 
-                    {
-                        <li>@Html.ActionLink("Users", "Index", "AppUsers")</li>
-                        <li>@Html.ActionLink("Roles", "Index", "RolesApps")</li>
+                    { //TODO: crearme las vistas para gestion de usuarios y roles
+@*                        <li>@Html.ActionLink("Gestión de usuarios", "Index", "AdminUser")</li>
+                        <li>@Html.ActionLink("Roles", "Index", "RolesApps")</li>*@
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

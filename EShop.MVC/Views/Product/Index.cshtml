@@ -5,6 +5,8 @@
     ViewBag.Title = "Index";
 }
 
+@*vista con el listado de los productos y página principal*@
+
 <head>
     <style>
         .item {
@@ -67,96 +69,104 @@
 </head>
 
 <body>
-    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    @if (ViewBag.Error == "Error")
     {
-        <p class="btn" style="margin-top: 27px;">
-            <input onclick="location.href='@Url.Action("Create", "Product")'" class="btn btn-dark btn-lg w-75" name="create new" value="Nuevo producto">
-        </p>
-
+        <p><br />@ViewBag.ErrorContent</p>
     }
-    @{ int c = 0;
-    }
-    
-    @foreach (var item in Model)
+    else
     {
-        if (c % 3 == 0)
+        if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))//admin puede crear productos
         {
-            <div class="row px-5 pt-5">
-            </div>
+            <p class="btn" style="margin-top: 27px;">
+                <input onclick="location.href='@Url.Action("Create", "Product")'" class="btn btn-dark btn-lg w-75" name="create new" value="Nuevo producto">
+            </p>
 
         }
-        c++;
+         int c = 0;
+        
 
-        <div class="col-lg-4 col-md-4">
-            <div class="card">
-                <div id="myCarousel" class="fixed-img carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <img src=@item.Images[0].Path>
-
-                        </div>
-                        @for (int i = 1; i < item.Images.Count; i++)
-                        {
-                            var imag = item.Images[i];
-                            <div class="item">
-                                <img src=@imag.Path alt=@imag.Path>
-                            </div>
-                        }
-                    </div>
-
+        foreach (var item in Model) //divido en tres columnas
+        {
+            if (c % 3 == 0)
+            {
+                <div class="row px-5 pt-5">
                 </div>
 
+            }
+            c++;
 
-                <h1>@Html.DisplayFor(modelItem => item.Name)</h1>
-                <p class="price"> € @Html.DisplayFor(modelItem => item.Price)</p>
+            <div class="col-lg-4 col-md-4">
+                <div class="card">
+                    <div id="myCarousel" class="fixed-img carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img src=@item.Images[0].Path> @*dirección de la imagen por defecto*@
+
+                            </div>
+                            @for (int i = 1; i < item.Images.Count; i++)
+                            {
+                                var imag = item.Images[i];
+                                <div class="item">
+                                    <img src=@imag.Path alt=@imag.Path>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+
+
+                    <h1>@Html.DisplayFor(modelItem => item.Name)</h1> @*nombre y precio del producto*@
+                    <p class="price"> € @Html.DisplayFor(modelItem => item.Price)</p>
 
 
 
-                <form method="get" action="@Url.Action("AddToCart", "Product")">
-                    <input hidden name="id" value=@item.Id />
-                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {<p class="price">En Stock : @Html.DisplayFor(modelItem => item.Stock)</p>}
+                    <form method="get" action="@Url.Action("AddToCart", "Product")">
+                        <input hidden name="id" value=@item.Id />
+                        @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {<p class="price">En Stock : @Html.DisplayFor(modelItem => item.Stock)</p>} @*admin puede ver el stock*@
 
-                else if (@User.Identity.IsAuthenticated)
-                {
-                    <input id="quantity" type="number" name="quantity" value="1" style="margin: 12px;" min="1" max=@item.Stock step="1" />
-
-                    if (item.Stock > 0)
+                    else if (@User.Identity.IsAuthenticated) //usuario
                     {
-                        <input class="delete" type="submit" value="Añadir al carrito" />
+                        <input id="quantity" type="number" name="quantity" value="1" style="margin: 12px;" min="1" max=@item.Stock step="1" />
 
-                    }
-                    else
-                    {
-                        <input class="delete" disabled type="submit" style="border: 1px solid #999999;
+                        if (item.Stock > 0)
+                        {
+                            <input class="delete" type="submit" value="Añadir al carrito" />
+
+                        }
+                        else 
+                        {
+                            <input class="delete" disabled type="submit" style="border: 1px solid #999999;
                                                                               background-color: #cccccc;
                                                                               color: #666666;" value="Sin Stock" />
 
+                        } //sin stock se deshabilita
+
                     }
 
-                }
 
+                    </form>
 
-                </form>
+                    
 
-                @* <input type="submit" onclick="location.href='@Url.Action("AddCart", "Products", new { id = item.Id })'" class="delete" value="Add to cart">*@
-
-                @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
+                    @if (@User.Identity.IsAuthenticated && User.IsInRole("Admin")) 
+                    {
 
 
 
-                    <input type="submit" onclick="location.href='@Url.Action("Edit", "Product", new { id = item.Id})'" class="delete" value="Modificar">
-                    <p></p>
-                    <input type="submit" onclick="location.href='@Url.Action("Delete", "Product", new { id = item.Id})'" class="delete" value="Borrar">
-                }
+                        <input type="submit" onclick="location.href='@Url.Action("Edit", "Product", new { id = item.Id})'" class="delete" value="Modificar">
+                        <p></p>
+                        <input type="submit" onclick="location.href='@Url.Action("Delete", "Product", new { id = item.Id})'" class="delete" value="Borrar">
+                    } @*admin puede borrar y modificar*@
+                </div>
+
+
             </div>
-
-
-        </div>
+        }
     }
 
-    
+
+
 
 
 </body>

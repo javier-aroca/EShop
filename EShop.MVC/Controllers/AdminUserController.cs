@@ -11,12 +11,14 @@ namespace EShop.MVC.Controllers
     public class AdminUserController : Controller
     {
         IApplicationDbContext context;
-        //ApplicationUserManager applicationUserManager = null;
-
+        
+        /// <summary>
+        /// contructor por defecto
+        /// </summary>
         public AdminUserController()
         {
             context = new ApplicationDbContext();
-            /*this.applicationUserManager = new ApplicationUserManager(context);*/
+            
 
         }
 
