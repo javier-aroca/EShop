@@ -50,16 +50,15 @@ namespace EShop.MVC
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
+
+            //Inyeccion de dependencias:
             container.RegisterType<IApplicationDbContext, ApplicationDbContext>(new PerRequestLifetimeManager());
             container.RegisterType<IOrderManager, OrderManager>();
             container.RegisterType<IProductManager, ProductManager>();
             container.RegisterType<IShoppingCartLineManager, ShoppingCartLineManager>();
-            //container.RegisterType(typeof(IUserStore<>), typeof(UserStore<>));//visto en internet
-
             container.RegisterType<AccountController>(new InjectionConstructor());
-            //container.RegisterType<RolesAdminController>(new InjectionConstructor());
             container.RegisterType<ManageController>(new InjectionConstructor());
-            //container.RegisterType<UsersAdminController>(new InjectionConstructor());
+            
         }
     }
 }

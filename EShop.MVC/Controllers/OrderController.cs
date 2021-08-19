@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize]
+    [Authorize] //usuarios registrados
     public class OrderController : Controller
     {
 
@@ -20,19 +20,26 @@ namespace EShop.MVC.Controllers
         
         //public OrderController() { } //test
         
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="orderManager">manager de pedido</param>
         public OrderController(IOrderManager orderManager)
         {
-            /*IApplicationDbContext context = new ApplicationDbContext();*/
-            this.orderManager = orderManager; /* new OrderManager(context);*/
+            
+            this.orderManager = orderManager; 
         }
         
 
 
         // GET: Order
+        /// <summary>
+        /// listado de pedidos incluyendo lineas de pedido
+        /// </summary>
+        /// <returns>vista con el modelo</returns>
         public ActionResult Index()
         {
             var model = orderManager.GetByUserId(User.Identity.GetUserId())
-                /*.Where(e => e.Status == CORE.OrderStatus.Pendiente)*/
                 .Include(e => e.OrderLines)
                 .Select(e => new OrderListModel
                 {
@@ -50,6 +57,11 @@ namespace EShop.MVC.Controllers
         }
 
         // GET: Order/Details/5
+        /// <summary>
+        /// detalle de un pedido
+        /// </summary>
+        /// <param name="id">id del pedido</param>
+        /// <returns>vista del modelo</returns>
         public ActionResult Details(int id)
         {
             var order = orderManager.GetById(id);
@@ -74,6 +86,11 @@ namespace EShop.MVC.Controllers
         }
 
         // POST: Order/Create
+        /// <summary>
+        /// crear un pedido
+        /// </summary>
+        /// <param name="model">modelo del nuevo pedido</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(Models.OrderListModel model)
         {
@@ -127,6 +144,12 @@ namespace EShop.MVC.Controllers
         }
 
         // POST: Order/Delete/5
+        /// <summary>
+        /// elimina un pedido
+        /// </summary>
+        /// <param name="id">id del pedido</param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

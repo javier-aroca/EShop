@@ -8,6 +8,6 @@ namespace EShop.CORE.Contracts
         Order GetByIdandOrderLines(int id);
         IQueryable<Order> GetByUserId(string userId);
 
-        void Create(string userId, string address);
+        void Create(string userId, string address, string emailAddress);
     }
 }

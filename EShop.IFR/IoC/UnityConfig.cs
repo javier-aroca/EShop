@@ -54,6 +54,9 @@ namespace EShop.IFR.IoC
 
             container.RegisterType(Type.GetType("EShop.CORE.Contract.IShoppingCartLineManager, EShop.CORE"),Type.GetType("EShop.Application.ShoppingCartLineManager, EShop.Application"));
 
+            
+            //NOTA: utilizo inyección de dependencias desde MVC ya que desde aquí no puedo implementarlo sin errores.
+            
             /*container.RegisterType<IProductManager, ProductManager>();
             container.RegisterType<IShoppingCartLineManager, ShoppingCartLineManager>();
             container.RegisterType(typeof(IUserStore<>), typeof(UserStore<>));//visto en internet*/

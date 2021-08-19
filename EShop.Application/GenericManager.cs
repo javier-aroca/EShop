@@ -30,7 +30,14 @@ namespace EShop.Application
         /// <returns>entidad añadida</returns>
         public T Add(T entity)
         {
-            return Context.Set<T>().Add(entity);
+            try
+            {
+                return Context.Set<T>().Add(entity);
+            }
+            catch (System.Exception e)
+            {
+                throw new System.Exception("Error al generar el elemento " + typeof(T));
+            }
         }
 
         /// <summary>
@@ -40,7 +47,14 @@ namespace EShop.Application
         /// <returns>entidad eliminada</returns>
         public T Remove(T entity)
         {
-            return Context.Set<T>().Remove(entity);
+            try
+            {
+                return Context.Set<T>().Remove(entity);
+            }
+            catch(System.Exception e)
+            {
+                throw new System.Exception("Error al eliminar el elemento " + typeof(T));
+            }
         }
 
         /// <summary>
@@ -50,8 +64,11 @@ namespace EShop.Application
         /// <returns>entidad</returns>
         public T GetById(object[] key)
         {
-            return Context.Set<T>().Find(key);
+            var result = Context.Set<T>().Find(key);
+            if (result == null)
+                throw new System.Exception("Error al obtener objeto " + typeof(T));
 
+            return result;
         }
 
         /// <summary>
@@ -70,12 +87,15 @@ namespace EShop.Application
         /// <returns>Lista todas las incidencias</returns>
         public IQueryable<T> GetAll()
         {
-            return Context.Set<T>();
+            try
+            {
+                return Context.Set<T>();
+            }
+            catch (System.Exception e)
+            {
+                throw new System.Exception("Error al listar " + typeof(T));
+            }
         }
-
-
-
-
     }
 }
 

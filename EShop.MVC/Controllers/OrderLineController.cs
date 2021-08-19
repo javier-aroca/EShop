@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize]
+    [Authorize]//usuarios registrados
     public class OrderLineController : Controller
     {
         // GET: OrderLine

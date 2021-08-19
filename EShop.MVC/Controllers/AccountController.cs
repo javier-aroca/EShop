@@ -13,16 +13,24 @@ using EShop.CORE;
 
 namespace EShop.MVC.Controllers
 {
-    [Authorize]
+    [Authorize] //permito el acceso a usuarios registrados
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+        /// <summary>
+        /// constructor vacio
+        /// </summary>
         public AccountController()
         {
         }
 
+        /// <summary>
+        /// constrouctor con usuario y log in
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
         {
             UserManager = userManager;

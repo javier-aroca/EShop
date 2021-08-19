@@ -4,13 +4,14 @@
     ViewBag.Title = "Delete";
 }
 
+@*vista para eliminar producto del catálogo*@
 <h2>Eliminar</h2>
 
 <h3>¿Seguro que quiere eliminar el producto?</h3>
 <div>
     
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal"> 
         <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -42,7 +43,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Eliminar" class="btn btn-default" /> |
-            @Html.ActionLink("Administración de productos", "Index")
+            @Html.ActionLink("Administración de productos", "Index") @*llamo al listado de administracion de productos*@
         </div>
     }
 </div>

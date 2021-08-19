@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using EShop.DAL;
 using EShop.CORE.Contracts;
+using System.Net.Mail;
+using System.Windows.Forms;
 
 namespace EShop.Application
 {
@@ -31,7 +33,16 @@ namespace EShop.Application
         /// <returns>todos los pedidos de un usuario</returns>
         public IQueryable<Order> GetByUserId(string userId)
         {
-            return Context.Set<Order>().Include("OrderLines").Where(e => e.UserId == userId);
+            try
+            {
+                var result = Context.Set<Order>().Include("OrderLines").Where(e => e.UserId == userId);
+
+                return result;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Se ha producido un fallo al recuperar los pedidos del usuario especificado");
+            }
         }
 
         /// <summary>
@@ -49,7 +60,7 @@ namespace EShop.Application
         /// método que crea una orden de compra y borra las lineas del carrito
         /// </summary>
         /// <param name="userId">usuario logeado</param>
-        public void Create(string userId, string deliveryAdress)
+        public void Create(string userId, string deliveryAddress, string userName)
         {
             ShoppingCartLineManager shoppingCartLineManager = new ShoppingCartLineManager(context);
             
@@ -58,12 +69,12 @@ namespace EShop.Application
             {
                 UserId = userId,
                 CreateDate = DateTime.Now,
-                Status = OrderStatus.Pendiente,
-                DeliveryAddress = deliveryAdress,
+                Status = OrderStatus.Procesado,
+                DeliveryAddress = deliveryAddress,
                 OrderLines = new List<OrderLine>()
             };
-            //Context.Set<Order>().Add(newOrder);
 
+            //por cada linea del carrito creo una linea de pedido
             foreach (ShoppingCartLine shoppingCartLine in shoppingCartLineManager.GetByUserId(userId))
             {
                 OrderLine line = new OrderLine()
@@ -73,19 +84,69 @@ namespace EShop.Application
                     Quantity = shoppingCartLine.Quantity
                 };
                 
-                //Context.Set<OrderLine>().Add(line);
+
                 newOrder.OrderLines.Add(line);
                 Context.Set<ShoppingCartLine>().Remove(shoppingCartLine);
             }
-            Context.Set<Order>().Add(newOrder);
+            Context.Set<Order>().Add(newOrder);//añado
 
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();//guardo cambios
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Se ha producido un problema al acceder a la base de datos");
+            }
+
+            sendEmail(userName, newOrder);//envio un email de confirmacion 
         }
 
 
-/*        private void sendEmail(string mailAddress)
+        /// <summary>
+        /// envio un email con los datos del pedido realizado
+        /// </summary>
+        /// <param name="mailAddress"></param>
+        /// <param name="order"></param>
+        private void sendEmail(string mailAddress, Order order)
         {
-           
-        }*/
+            string to = mailAddress;//email del cliente
+            string from = "admin@admin.com";//desde admin
+            MailMessage message = new MailMessage(from, to);
+            message.Subject = "Información nuevo pedido";//tema
+            message.Body = "Se ha registrado un nuevo pedido a tu nombre.\nLos productos incluidos son:" +
+                            "\n" + String.Join("\n", order.OrderLines.Select(x => x.ProductName + ": " + x.Quantity));
+
+            //NOTA: esta parte la dejo comentada ya que no hay un servidor de correo SMTP. 
+            /*SmtpClient client = new SmtpClient(server);*/
+            // Credentials are necessary if the server requires the client
+            // to authenticate before it will send email on the client's behalf.
+            /*client.UseDefaultCredentials = true;*/
+
+
+            //en vez de email, envío un mensaje al usuario
+            // inicializar las variables para el metodo MessageBox.Show
+            string messageBox = "Compra realizada. Se ha enviado un email de confirmación";
+            string caption = "Mensaje";
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            DialogResult result;
+
+            // mostrar el MessageBox.
+            result = MessageBox.Show(messageBox, caption, buttons);
+
+
+            try
+            {
+                /*client.Send(message);*/
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("error al enviar el email de confirmación",
+                    ex.ToString());
+            }
+
+        }
+
+        
     }
 }

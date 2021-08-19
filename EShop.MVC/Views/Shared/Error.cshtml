@@ -4,6 +4,26 @@
     ViewBag.Title = "Error";
 }
 
+@*Página de error con datos genéricos. NOTA: Siguiendo el ejemplo del webinar no me funciona*@
+
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">Error al procesar la solicitud.</h2>
+
+<div style="background-color: #A52A2A; color: White; height: 10px;">
+</div>
+<div style="background-color: #F5F5DC; color:black; height: 170px;">
+    <div style=" padding:20px;">
+        <h3>
+            Error:
+        </h3>
+        <h4>
+            Se ha producido un error el procesar la solicitud. Contacte por favor con el administrador de la aplicación.
+        </h4>
+        <h6>@Html.ActionLink("Volver al inicio", "Index", "Product")</h6>
+        <br />
+        <br />
+    </div>
+</div>
+<div style="background-color: #A52A2A; color: White; height: 20px;">
+</div>
 

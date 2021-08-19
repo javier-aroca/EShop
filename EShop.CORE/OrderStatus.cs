@@ -8,14 +8,14 @@
         /// <summary>
         /// pedido pendiente no pagado
         /// </summary>
-        Pendiente = 0,
+        Procesado = 0,
         /// <summary>
         /// pedido pagado pero no enviado
         /// </summary>
-        Pagado = 1,
+        Enviado = 1,
         /// <summary>
         /// pedido pagado y enviado
         /// </summary>
-        Enviado = 2
+        Recibido = 2
     }
 }

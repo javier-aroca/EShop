@@ -206,7 +206,8 @@ namespace EShop.MVC.Controllers
         public ActionResult CreateOrder(string address)
         {
             
-            orderManager.Create(User.Identity.GetUserId(), address);
+            orderManager.Create(User.Identity.GetUserId(), address, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
     }
